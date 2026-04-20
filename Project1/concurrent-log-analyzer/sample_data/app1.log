@@ -1,0 +1,5 @@
+2026-04-20 10:15:03 | INFO  | auth-service    | USER_LOGIN_SUCCESS | user=123
+2026-04-20 10:15:05 | ERROR | payment-service | PAYMENT_TIMEOUT    | order=999 timeout=30s
+2026-04-20 10:15:06 | WARN  | auth-service    | TOKEN_EXPIRING     | user=555
+2026-04-20 10:15:08 | ERROR | payment-service | PAYMENT_TIMEOUT    | order=1000 timeout=30s
+2026-04-20 10:15:09 | INFO  | order-service   | ORDER_CREATED      | order=1001

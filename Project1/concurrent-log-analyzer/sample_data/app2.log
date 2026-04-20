@@ -1,0 +1,5 @@
+2026-04-20 11:00:01 | INFO  | user-service    | USER_CREATED       | user=888
+2026-04-20 11:00:02 | ERROR | order-service   | DB_CONNECTION_FAIL | db=orders
+2026-04-20 11:00:03 | ERROR | payment-service | PAYMENT_TIMEOUT    | order=1002 timeout=30s
+2026-04-20 11:00:04 | WARN  | user-service    | PROFILE_INCOMPLETE | user=888
+2026-04-20 11:00:05 | INFO  | auth-service    | USER_LOGOUT        | user=123

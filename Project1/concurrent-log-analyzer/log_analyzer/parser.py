@@ -32,3 +32,15 @@ def parse_line(line: str, source_file: str) -> Optinal[LogEntry]:
         message=message.strip(),
         source_file=source_file,
     )
+
+def iter_entries_from_file(path: Path) -> Iterator[LogEntry]:
+    """
+    Yield parsed LogEntry objects from one log file.
+    Invalid lines are skipped.
+    """
+
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            entry = parse_line(line, source_file=path.name)
+            if entry is not None:
+                yield entry

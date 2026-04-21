@@ -2,12 +2,12 @@ import argparse
 from pathlib import Path
 
 from log_analyzer.analyzer import analyze_entries
-from log_analyzer.parser import parse_line
+from log_analyzer.parser import iter_entries_from_file
 from log_analyzer.scanner import iter_log_files
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description = "Concurrent Log Analyzer - Phase 1"
+        description = "Concurrent Log Analyzer - Phase 1.5"
     )
 
     parser.add_argument(
@@ -17,20 +17,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     return parser
 
+def iter_all_entries(directory: str):
+    """
+    Yield LogEntry objects from all log files under the directory.
+    """
+    for log_file in iter_log_files(directory):
+        yield from iter_entries_from_file(log_file)
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    all_entries = []
-
-    for log_file in iter_log_files(args.dir):
-        with open(log_file, "r", encoding = "utf-8") as f:
-            for line in f:
-                entry = parse_line(line, source_file=log_file.name)
-                if entry is not None:
-                    all_entries.append(entry)
-    
-    result = analyze_entries(all_entries)
+    entries = iter_all_entries(args.dir)
+    result = analyze_entries(entries)
 
     print("=" * 60)
     print("LOG ANALYSIS REPORT")

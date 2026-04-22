@@ -1,0 +1,3 @@
+event_code,count
+PAYMENT_TIMEOUT,3
+DB_CONNECTION_FAIL,1

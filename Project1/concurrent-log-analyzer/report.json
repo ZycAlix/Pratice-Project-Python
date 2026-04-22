@@ -1,0 +1,24 @@
+{
+  "total_lines": 10,
+  "levels": {
+    "INFO": 4,
+    "ERROR": 4,
+    "WARN": 2
+  },
+  "services": {
+    "auth-service": 3,
+    "payment-service": 3,
+    "order-service": 2,
+    "user-service": 2
+  },
+  "top_error_codes": [
+    [
+      "PAYMENT_TIMEOUT",
+      3
+    ],
+    [
+      "DB_CONNECTION_FAIL",
+      1
+    ]
+  ]
+}

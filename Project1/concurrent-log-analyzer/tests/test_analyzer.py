@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from log_analyzer.analyzer import analyze_entries
+from log_analyzer.analyzer import analyze_entries, merge_analysis_results
 from log_analyzer.models import LogEntry
 
 
@@ -35,8 +35,8 @@ def test_analyze_entries_basic_counts():
     assert result["services"]["payment-service"] == 2
     assert result["services"]["order-service"] == 1
 
-    assert result["top_error_codes"][0] == ("PAYMENT_TIMEOUT", 2)
-    assert result["top_error_codes"][1] == ("DB_CONNECTION_FAIL", 1)
+    assert result["error_codes"]["PAYMENT_TIMEOUT"] == 2
+    assert result["error_codes"]["DB_CONNECTION_FAIL"] == 1
 
 
 def test_analyze_entries_empty():
@@ -45,4 +45,25 @@ def test_analyze_entries_empty():
     assert result["total_lines"] == 0
     assert result["levels"] == {}
     assert result["services"] == {}
-    assert result["top_error_codes"] == []
+    assert result["error_codes"] == {}
+
+
+def test_merge_analysis_results():
+    result1 = analyze_entries([
+        make_entry("INFO", "auth-service", "USER_LOGIN_SUCCESS"),
+        make_entry("ERROR", "payment-service", "PAYMENT_TIMEOUT"),
+    ])
+
+    result2 = analyze_entries([
+        make_entry("ERROR", "payment-service", "PAYMENT_TIMEOUT"),
+        make_entry("ERROR", "order-service", "DB_CONNECTION_FAIL"),
+    ])
+
+    merged = merge_analysis_results([result1, result2])
+
+    assert merged["total_lines"] == 4
+    assert merged["levels"]["INFO"] == 1
+    assert merged["levels"]["ERROR"] == 3
+    assert merged["services"]["payment-service"] == 2
+    assert merged["top_error_codes"][0] == ("PAYMENT_TIMEOUT", 2)
+    assert merged["top_error_codes"][1] == ("DB_CONNECTION_FAIL", 1)
